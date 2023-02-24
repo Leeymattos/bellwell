@@ -1,16 +1,41 @@
 import Head from 'next/head'
 import { GetServerSideProps } from 'next'
 import { getProducts } from '../lib/products'
-import { Product } from '@prisma/client'
-import { CaretDown, CaretUp, MagnifyingGlass, Plus } from 'phosphor-react'
-import Image from 'next/image'
-import mercado from '../assets/mercadolivre.webp'
+import { Product, Room } from '@prisma/client'
+import { MagnifyingGlass, Plus } from 'phosphor-react'
+
+import { getRooms } from '@/lib/rooms'
+import { useEffect, useState } from 'react'
 
 type ProductsProps = {
   products: Product[]
+  rooms: Room[]
 }
 
-export default function Home({ products }: ProductsProps) {
+export default function Home({ products, rooms }: ProductsProps) {
+  const [selectedRoom, setSelectedRoom] = useState<string>('0');
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>(products)
+  const [searchProduct, setSearchProduct] = useState<string>('')
+
+
+  useEffect(() => {
+    if (selectedRoom !== '0' && searchProduct !== '') {
+      let newSelectedProducts = products.filter(product => product.room_id === selectedRoom);
+      newSelectedProducts = newSelectedProducts.filter(product => product.name.toLowerCase().indexOf(searchProduct.toLowerCase()) > -1);
+      setSelectedProducts(newSelectedProducts);
+    } else if (selectedRoom !== '0' && searchProduct === '') {
+      const newSelectedProducts = products.filter(product => product.room_id === selectedRoom);
+      setSelectedProducts(newSelectedProducts);
+    } else if (selectedRoom === '0' && searchProduct !== '') {
+      const newSelectedProducts = products.filter(product => product.name.toLowerCase().indexOf(searchProduct.toLowerCase()) > -1);
+      setSelectedProducts(newSelectedProducts);
+    } else {
+      setSelectedProducts(products);
+    }
+
+  }, [selectedRoom, searchProduct])
+
+
   return (
     <>
       <Head>
@@ -34,18 +59,30 @@ export default function Home({ products }: ProductsProps) {
           <div className="w-full my-4">
             <form>
               <div className="flex">
-                <select defaultValue={0} className="py-1 px-1 text-sm font-medium text-gray-900 bg-gray-50 rounded-l-xl border border-gray-300 ">
-                  <option selected value={0}>Comodos</option>
-                  <option value="US">Quarto</option>
-                  <option value="CA">Sala</option>
-                  <option value="FR">Cozinha</option>
-                  <option value="DE">Banheiro</option>
+                <select
+                  className="py-1 px-1 text-sm font-medium text-gray-900 bg-gray-50 rounded-l-xl border border-gray-300 "
+                  onChange={e => setSelectedRoom(e.target.value)}
+                  value={selectedRoom}
+                >
+                  <option selected value='0'>Comodos</option>
+                  {rooms.map(room => {
+                    return (
+                      <option
+                        key={room.id}
+                        value={room.id}
+                      >
+                        {room.name}
+                      </option>
+                    )
+                  })}
                 </select>
                 <div className="relative w-full">
                   <input
                     type="search"
                     className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-xl border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Procurar produtos..."
+                    value={searchProduct}
+                    onChange={e => setSearchProduct(e.target.value)}
                   />
                   <button
                     type="submit"
@@ -61,7 +98,7 @@ export default function Home({ products }: ProductsProps) {
 
         <main className='grid grid-cols-12 gap-3 mt-5'>
 
-          {products.map(product => {
+          {selectedProducts.map(product => {
             return (
               <div key={product.id} className='col-span-12 flex justify-center'>
                 <div className='w-[80%] border border-gray-200 rounded-lg shadow p-2'>
@@ -86,10 +123,12 @@ export default function Home({ products }: ProductsProps) {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const products = await getProducts()
+  const rooms = await getRooms()
 
   return {
     props: {
-      products
+      products,
+      rooms
     }
   }
 }
