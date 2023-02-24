@@ -19,8 +19,8 @@ export default function Home({ products }: ProductsProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className='container'>
-        <header className='p-4 bg-gradient-to-b from-zinc-200 to-zinc-50'>
+      <div className='container bg-zinc-50'>
+        <header className='p-4 bg-zinc-100'>
           <div className='flex items-center justify-between'>
 
             <h1 className='font-bold text-3xl p-2'>BellWell</h1>
@@ -34,8 +34,8 @@ export default function Home({ products }: ProductsProps) {
           <div className="w-full my-4">
             <form>
               <div className="flex">
-                <select defaultValue={0} className="py-1 px-1 text-sm font-medium text-gray-900 bg-gray-50 rounded-l-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500">
-                  <option selected value={0}>Escolha o Comodo</option>
+                <select defaultValue={0} className="py-1 px-1 text-sm font-medium text-gray-900 bg-gray-50 rounded-l-xl border border-gray-300 ">
+                  <option selected value={0}>Comodos</option>
                   <option value="US">Quarto</option>
                   <option value="CA">Sala</option>
                   <option value="FR">Cozinha</option>
@@ -44,12 +44,12 @@ export default function Home({ products }: ProductsProps) {
                 <div className="relative w-full">
                   <input
                     type="search"
-                    className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                    placeholder="Procurar produto..."
+                    className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-xl border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Procurar produtos..."
                   />
                   <button
                     type="submit"
-                    className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-emerald-500 rounded-r-lg border border-gray-300 focus:ring-2 focus:outline-none">
+                    className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-emerald-600 rounded-r-xl border border-gray-300 focus:outline-none">
                     <MagnifyingGlass className='w-5 h-5' />
                     <span className="sr-only">Search</span>
                   </button>
@@ -65,13 +65,13 @@ export default function Home({ products }: ProductsProps) {
             return (
               <div key={product.id} className='col-span-12 flex justify-center'>
                 <div className='w-[80%] border border-gray-200 rounded-lg shadow p-2'>
-                  <img src={product.image_url} alt={`Imagem do produto ${product.name}`} />
+                  <img src={product.image_url} alt={`Imagem do produto ${product.name}`} className='shadow-lg' />
 
-                  <h3 className='font-bold text-lg mt-2'>{product.name}</h3>
+                  <h3 className='font-bold text-lg mt-4'>{product.name}</h3>
 
                   <p className='font-light text-sm'>Este item pode ser adquirido no {product.description}</p>
                   <div className='w-full text-center my-4 '>
-                    <a href={product.link} rel="noopener noreferrer" target="_blank" className='bg-blue-700 h-10 p-2 rounded-lg text-white'>Compre Agora</a>
+                    <a href={product.link} rel="noopener noreferrer" target="_blank" className='bg-emerald-600 h-10 p-2 rounded-lg text-white'>Compre Agora</a>
                   </div>
                 </div>
               </div>
