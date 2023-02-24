@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  relationMode      = "prisma"
+}
+
+model Room {
+  id   String @id @default(uuid())
+  name String
+
+  Product Product[]
+}
+
+model Product {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  link        String
+  image_url   String
+  room_id     String
+
+  room Room @relation(fields: [room_id], references: [id])
+
+  @@index([room_id])
+}
