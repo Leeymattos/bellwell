@@ -1,6 +1,7 @@
 import { api } from "@/services/api";
 import { Room } from "@prisma/client"
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
+
 import { FormEvent, useState } from "react"
 import { toast, Flip } from "react-toastify";
 
@@ -42,7 +43,7 @@ export function NewProduct({ rooms }: NewProductProps) {
         progress: undefined,
       });
 
-      router.push('/');
+      router.replace(router.asPath)
 
 
     } catch (e) {
@@ -59,7 +60,6 @@ export function NewProduct({ rooms }: NewProductProps) {
       });
       console.log(e);
     }
-
   }
 
   return (
