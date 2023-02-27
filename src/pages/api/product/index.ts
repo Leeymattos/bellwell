@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import { createProduct, getProducts } from '@/lib/products';
+import { Product } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next'
 /* 
 type Data = {
@@ -24,7 +25,7 @@ export default async function handler(
       return res.status(400).json({ error: error })
     }
   } else if (method === "POST") {
-    const product = req.body;
+    const product: Product = req.body;
     const createeProduct = await createProduct(product)
 
     return res.status(201).json({
