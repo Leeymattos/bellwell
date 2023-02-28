@@ -6,7 +6,7 @@ html {
   font-family: 'Inter', sans-serif;
 }
 
-.toast-style {
+:root {
   --toastify-color-success: #0DCA70;
   --toastify-color-error: #e74c3c;
   --toastify-toast-width: 300px;

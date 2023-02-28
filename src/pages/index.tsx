@@ -8,6 +8,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { getRooms } from '@/lib/rooms'
 import { useEffect, useState } from 'react'
 import { NewProduct } from '@/components/newProduct'
+import { toast } from 'react-toastify'
 
 type ProductsProps = {
   products: Product[]
@@ -18,7 +19,6 @@ export default function Home({ products, rooms }: ProductsProps) {
   const [selectedRoom, setSelectedRoom] = useState<string>('0');
   const [selectedProducts, setSelectedProducts] = useState<Product[]>(products)
   const [searchProduct, setSearchProduct] = useState<string>('')
-
 
   useEffect(() => {
     let filteredProducts = products;
@@ -62,7 +62,7 @@ export default function Home({ products, rooms }: ProductsProps) {
 
               <Dialog.Portal>
                 <Dialog.Overlay className='w-screen h-screen bg-zinc-800/70 fixed inset-0' />
-                <Dialog.Content className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xs bg-white rounded-xl p-2'>
+                <Dialog.Content className='absolute top-20 left-1/2 -translate-x-1/2 w-full max-w-xs bg-white rounded-xl p-2'>
                   <Dialog.Close className='absolute right-3 top-3 text-zinc-800 hover:text-zinc-600 transition-all'>
                     <X size={24} aria-label='Fechar' />
                   </Dialog.Close>

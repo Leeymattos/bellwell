@@ -1,6 +1,5 @@
 import { api } from "@/services/api";
 import { Room } from "@prisma/client"
-import { useRouter } from "next/router";
 
 import { FormEvent, useState } from "react"
 import { toast, Flip } from "react-toastify";
@@ -10,8 +9,6 @@ type NewProductProps = {
 }
 
 export function NewProduct({ rooms }: NewProductProps) {
-
-  const router = useRouter();
 
   const [selectedRoom, setSelectedRoom] = useState<string>('');
   const [nameProduct, setNameProduct] = useState<string>('');
@@ -23,15 +20,17 @@ export function NewProduct({ rooms }: NewProductProps) {
     e.preventDefault();
 
     try {
-      const response = await api.post('/product', {
-        room_id: selectedRoom,
+      const res = await api.post('/product', {
         name: nameProduct,
         description,
         link,
-        image_url: urlImage
+        image_url: urlImage,
+        room_id: selectedRoom
       })
 
-      toast.success('Usuário logado com sucesso', {
+      console.log(res)
+
+      toast.success('Produto adicionado com sucesso!', {
         transition: Flip,
         position: "top-center",
         autoClose: 1000,
@@ -43,11 +42,16 @@ export function NewProduct({ rooms }: NewProductProps) {
         progress: undefined,
       });
 
-      router.replace(router.asPath)
+      setDescription('');
+      setNameProduct('');
+      setSelectedRoom('');
+      setLink('');
+      setUrlImage('');
+
 
 
     } catch (e) {
-      toast('Produto não cadastrado, tente novamente!', {
+      toast.error('Produto não cadastrado, tente novamente!', {
         transition: Flip,
         position: "top-right",
         autoClose: 1500,

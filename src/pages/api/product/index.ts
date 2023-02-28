@@ -3,6 +3,7 @@
 import { createProduct, getProducts } from '@/lib/products';
 import { Product } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { z } from 'zod';
 /* 
 type Data = {
   name: string    Aprender a utilizar desta forma
@@ -25,11 +26,23 @@ export default async function handler(
       return res.status(400).json({ error: error })
     }
   } else if (method === "POST") {
-    const product: Product = req.body;
-    const createeProduct = await createProduct(product)
+    try {
+      const createProductSchema = z.object({
+        name: z.string({ required_error: "Name is required" }),
+        description: z.string(),
+        link: z.string(),
+        image_url: z.string(),
+        room_id: z.string()
+      })
 
-    return res.status(201).json({
-      data: product
-    })
+      const result = createProductSchema.parse(req.body);
+
+      const product = createProduct(result);
+
+      return res.status(201).send({ product })
+    } catch (e) {
+      res.status(400).send({ error: e })
+    }
+
   }
 }
