@@ -4,11 +4,9 @@ import { getProducts } from '../lib/products'
 import { Product, Room } from '@prisma/client'
 import { MagnifyingGlass, Plus, X } from 'phosphor-react'
 import * as Dialog from '@radix-ui/react-dialog';
-
 import { getRooms } from '@/lib/rooms'
 import { useEffect, useState } from 'react'
 import { NewProduct } from '@/components/newProduct'
-import { toast } from 'react-toastify'
 
 type ProductsProps = {
   products: Product[]

@@ -28,20 +28,24 @@ export default async function handler(
   } else if (method === "POST") {
     try {
       const createProductSchema = z.object({
-        name: z.string({ required_error: "Name is required" }),
+        name: z.string({ required_error: "Name is required" }).min(4),
         description: z.string(),
         link: z.string(),
         image_url: z.string(),
         room_id: z.string()
       })
 
-      const result = createProductSchema.parse(req.body);
 
-      const product = createProduct(result);
+      console.log(req.body)
+      const result = await createProductSchema.parse(req.body);
 
-      return res.status(201).send({ product })
+      console.log(result)
+
+
+      return res.status(201).send({ result })
     } catch (e) {
-      res.status(400).send({ error: e })
+      console.log(e)
+      res.status(404).send({ error: e })
     }
 
   }
