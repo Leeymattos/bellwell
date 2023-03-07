@@ -8,6 +8,9 @@ import { getRooms } from '@/lib/rooms'
 import { useEffect, useState } from 'react'
 import { NewProduct } from '@/components/newProduct'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { api } from '@/services/api'
+import { Flip, toast } from 'react-toastify'
+import { useRouter } from 'next/router'
 
 type ProductsProps = {
   products: Product[]
@@ -15,9 +18,15 @@ type ProductsProps = {
 }
 
 export default function Home({ products, rooms }: ProductsProps) {
+
   const [selectedRoom, setSelectedRoom] = useState<string>('0');
   const [selectedProducts, setSelectedProducts] = useState<Product[]>(products)
   const [searchProduct, setSearchProduct] = useState<string>('')
+  const router = useRouter();
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
 
   useEffect(() => {
     let filteredProducts = products;
@@ -38,7 +47,37 @@ export default function Home({ products, rooms }: ProductsProps) {
 
   }, [selectedRoom, searchProduct])
 
+  async function handleDeleteProduct(id: string) {
+    try {
+      await api.delete(`/product/${id}`);
 
+      toast.success('Produto excluído com sucesso!', {
+        transition: Flip,
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+        progress: undefined,
+      });
+
+    } catch (error) {
+      toast.error(`Produto não excluído, tente novamente!`, {
+        transition: Flip,
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+        progress: undefined,
+      });
+      console.log(error);
+    }
+  }
   return (
     <>
       <Head>
@@ -54,7 +93,7 @@ export default function Home({ products, rooms }: ProductsProps) {
             <h1 className='font-bold text-3xl p-2'>BellWell</h1>
 
             <Dialog.Root>
-              <Dialog.Trigger className='flex items-center gap-1 h-10 p-2 text-sm font-bold border-2 border-slate-900 rounded-lg'>
+              <Dialog.Trigger className='flex items-center gap-1 h-10 p-2 text-sm font-bold border-2 border-slate-900 rounded-lg focus:outline-slate-500 '>
                 <Plus size={20} />
                 Novo Item
               </Dialog.Trigger>
@@ -62,7 +101,7 @@ export default function Home({ products, rooms }: ProductsProps) {
               <Dialog.Portal>
                 <Dialog.Overlay className='bg-zinc-800/70 data-[state=open]:animate-overlayShow fixed inset-0' />
                 <Dialog.Content className='data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[500px] translate-x-[-50%] translate-y-[-50%] rounded-xl bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none'>
-                  <Dialog.Close className='absolute right-3 top-3 text-zinc-800 hover:text-zinc-600 transition-all'>
+                  <Dialog.Close asChild className='absolute right-3 top-3 text-zinc-800 hover:text-zinc-600 transition-all'>
                     <X size={24} aria-label='Fechar' />
                   </Dialog.Close>
 
@@ -81,7 +120,7 @@ export default function Home({ products, rooms }: ProductsProps) {
             <form>
               <div className="flex">
                 <select
-                  className="py-1 px-1 text-sm font-medium text-gray-900 bg-gray-50 rounded-l-xl border border-gray-300   "
+                  className="py-1 px-1 text-sm font-medium text-gray-900 bg-gray-50 rounded-l-xl border-2 border-gray-300 focus:border-slate-900 focus:outline-none"
                   onChange={e => setSelectedRoom(e.target.value)}
                   value={selectedRoom}
                 >
@@ -100,7 +139,7 @@ export default function Home({ products, rooms }: ProductsProps) {
                 <div className="relative w-full">
                   <input
                     type="search"
-                    className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-xl border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+                    className="block p-2.5 w-full z-20 text-sm font-medium text-gray-900 bg-gray-50 rounded-r-xl border-2 border-gray-300 focus:border-gray-900 focus:outline-none"
                     placeholder="Procurar produtos..."
                     value={searchProduct}
                     onChange={e => setSearchProduct(e.target.value)}
@@ -131,8 +170,8 @@ export default function Home({ products, rooms }: ProductsProps) {
                   <div className='w-full my-4 flex justify-between'>
                     <a href={product.link} rel="noopener noreferrer" target="_blank" className='bg-emerald-600 h-10 p-2 rounded-lg text-white'>Compre agora</a>
                     <AlertDialog.Root>
-                      <AlertDialog.Trigger>
-                        <button className='bg-red-500 h-10 p-2 rounded-lg text-white'>Deletar</button>
+                      <AlertDialog.Trigger asChild>
+                        <button className='bg-red-500 h-10 p-2 rounded-lg text-white'>Excluir</button>
                       </AlertDialog.Trigger>
                       <AlertDialog.Portal>
                         <AlertDialog.Overlay className="bg-zinc-800/70 data-[state=open]:animate-overlayShow fixed inset-0" />
@@ -146,14 +185,17 @@ export default function Home({ products, rooms }: ProductsProps) {
                           </AlertDialog.Description>
 
                           <div className='flex justify-between mt-5'>
-                            <AlertDialog.Cancel>
+                            <AlertDialog.Cancel asChild>
                               <button className='bg-zinc-300 h-10 p-2 rounded-lg text-zinc-500 font-bold'>
                                 Cancelar
                               </button>
                             </AlertDialog.Cancel>
 
-                            <AlertDialog.Action>
-                              <button className='bg-red-300 h-10 p-2 rounded-lg text-red-700 font-bold'>
+                            <AlertDialog.Action asChild>
+                              <button
+                                className='bg-red-300 h-10 p-2 rounded-lg text-red-700 font-bold'
+                                onClick={() => handleDeleteProduct(product.id)}
+                              >
                                 Sim, exluir porduto
                               </button>
                             </AlertDialog.Action>

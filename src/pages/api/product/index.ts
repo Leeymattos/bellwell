@@ -1,7 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
 import { createProduct, getProducts } from '@/lib/products';
-import { Product } from '@prisma/client';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { z } from 'zod';
 /* 

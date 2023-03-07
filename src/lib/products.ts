@@ -8,6 +8,10 @@ interface CreateProduct {
   room_id: string
 }
 
+interface DeleteProduct {
+  productId: string
+}
+
 const prisma = new PrismaClient()
 
 export async function getProducts() {
@@ -22,4 +26,24 @@ export async function createProduct(Product: CreateProduct): Promise<Product> {
   })
 
   return product
+}
+
+export async function deleteProduct({ productId }: DeleteProduct) {
+  const product = await prisma.product.findUnique({
+    where: {
+      id: productId
+    }
+  })
+
+  if (!product) {
+    return;
+  }
+
+  const res = await prisma.product.delete({
+    where: {
+      id: productId
+    }
+  })
+
+  return res;
 }
