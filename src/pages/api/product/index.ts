@@ -29,23 +29,20 @@ export default async function handler(
     try {
       const createProductSchema = z.object({
         name: z.string({ required_error: "Name is required" }).min(4),
-        description: z.string(),
-        link: z.string(),
-        image_url: z.string(),
-        room_id: z.string()
+        description: z.string().min(5),
+        link: z.string().min(5),
+        image_url: z.string().min(5),
+        room_id: z.string().min(2)
       })
 
+      const product = createProductSchema.parse(req.body);
 
-      console.log(req.body)
-      const result = await createProductSchema.parse(req.body);
+      const createdProduct = await createProduct(product);
 
-      console.log(result)
+      return res.status(201).send({ createdProduct })
 
-
-      return res.status(201).send({ result })
     } catch (e) {
-      console.log(e)
-      res.status(404).send({ error: e })
+      res.status(404).send({ e })
     }
 
   }

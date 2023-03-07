@@ -7,6 +7,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { getRooms } from '@/lib/rooms'
 import { useEffect, useState } from 'react'
 import { NewProduct } from '@/components/newProduct'
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
 
 type ProductsProps = {
   products: Product[]
@@ -59,18 +60,16 @@ export default function Home({ products, rooms }: ProductsProps) {
               </Dialog.Trigger>
 
               <Dialog.Portal>
-                <Dialog.Overlay className='w-screen h-screen bg-zinc-800/70 fixed inset-0' />
-                <Dialog.Content className='absolute top-20 left-1/2 -translate-x-1/2 w-full max-w-xs bg-white rounded-xl p-2'>
+                <Dialog.Overlay className='bg-zinc-800/70 data-[state=open]:animate-overlayShow fixed inset-0' />
+                <Dialog.Content className='data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[500px] translate-x-[-50%] translate-y-[-50%] rounded-xl bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none'>
                   <Dialog.Close className='absolute right-3 top-3 text-zinc-800 hover:text-zinc-600 transition-all'>
                     <X size={24} aria-label='Fechar' />
                   </Dialog.Close>
 
-                  <div className='px-2'>
-                    <Dialog.Title className='text-3xl leading-tight font-bold mt-6 mb-4'>
-                      Adicionar Produto
-                    </Dialog.Title>
-                    <NewProduct rooms={rooms} />
-                  </div>
+                  <Dialog.Title className='text-3xl leading-tight font-bold mt-6 mb-4'>
+                    Adicionar Produto
+                  </Dialog.Title>
+                  <NewProduct rooms={rooms} />
 
                 </Dialog.Content>
               </Dialog.Portal>
@@ -129,8 +128,39 @@ export default function Home({ products, rooms }: ProductsProps) {
                   <h3 className='font-bold text-lg mt-4'>{product.name}</h3>
 
                   <p className='font-light text-sm'>Este item pode ser adquirido no {product.description}</p>
-                  <div className='w-full text-center my-4 '>
-                    <a href={product.link} rel="noopener noreferrer" target="_blank" className='bg-emerald-600 h-10 p-2 rounded-lg text-white'>Compre Agora</a>
+                  <div className='w-full my-4 flex justify-between'>
+                    <a href={product.link} rel="noopener noreferrer" target="_blank" className='bg-emerald-600 h-10 p-2 rounded-lg text-white'>Compre agora</a>
+                    <AlertDialog.Root>
+                      <AlertDialog.Trigger>
+                        <button className='bg-red-500 h-10 p-2 rounded-lg text-white'>Deletar</button>
+                      </AlertDialog.Trigger>
+                      <AlertDialog.Portal>
+                        <AlertDialog.Overlay className="bg-zinc-800/70 data-[state=open]:animate-overlayShow fixed inset-0" />
+                        <AlertDialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[500px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                          <AlertDialog.Title className='text-2xl leading-tight font-bold mt-1 mb-4'>
+                            Tem certeza absoluta?
+                          </AlertDialog.Title>
+
+                          <AlertDialog.Description className='text-zinc-500'>
+                            Esta ação não pode ser desfeita. Isso excluirá permanentemente esse produto e removerá todos os dados.
+                          </AlertDialog.Description>
+
+                          <div className='flex justify-between mt-5'>
+                            <AlertDialog.Cancel>
+                              <button className='bg-zinc-300 h-10 p-2 rounded-lg text-zinc-500 font-bold'>
+                                Cancelar
+                              </button>
+                            </AlertDialog.Cancel>
+
+                            <AlertDialog.Action>
+                              <button className='bg-red-300 h-10 p-2 rounded-lg text-red-700 font-bold'>
+                                Sim, exluir porduto
+                              </button>
+                            </AlertDialog.Action>
+                          </div>
+                        </AlertDialog.Content>
+                      </AlertDialog.Portal>
+                    </AlertDialog.Root>
                   </div>
                 </div>
               </div>

@@ -20,23 +20,24 @@ export function NewProduct({ rooms }: NewProductProps) {
 
   const CreateProductShema = Yup.object().shape({
     selectedRoom: Yup.string()
+      .min(2, 'Necessário escolher um comodo')
       .required('Necessário escolher um comodo'),
     nameProduct: Yup.string()
-      .min(2, 'Nome menor do que o esperado')
+      .min(4, 'Nome menor do que o esperado')
       .max(100, 'Nome maior do o esperado')
       .required('Campo obrigatório'),
     description: Yup.string()
-      .min(2, 'Nome menor do que o esperado')
+      .min(5, 'Nome menor do que o esperado')
       .max(100, 'Nome maior do o esperado')
       .required('Campo obrigatório'),
     link: Yup.string()
-      .min(2, 'Nome menor do que o esperado')
+      .min(5, 'Nome menor do que o esperado')
       .required('Campo obrigatório'),
     urlImage: Yup.string()
-      .min(2, 'Nome menor do que o esperado')
-      .required('Campo obrigatório'),
-
+      .min(5, 'Nome menor do que o esperado')
+      .required('Campo obrigatório')
   })
+
   async function handleSubmitForm(values: ValuesForm) {
 
     try {
@@ -60,8 +61,10 @@ export function NewProduct({ rooms }: NewProductProps) {
         progress: undefined,
       });
 
-    } catch (e) {
-      toast.error('Produto não cadastrado, tente novamente!', {
+      console.log(res)
+
+    } catch (error) {
+      toast.error(`Produto não cadastrado, tente novamente!`, {
         transition: Flip,
         position: "top-right",
         autoClose: 1500,
@@ -91,13 +94,11 @@ export function NewProduct({ rooms }: NewProductProps) {
     >
       {({ errors, touched }) => (
         <Form>
-
           <div className={`mb-4 ${errors.selectedRoom && touched.selectedRoom ? "mb-1" : "mb-4"}`}>
             <label htmlFor='comodos' className='block text-zinc-700 text-sm font-bold mb-2'>Qual comodo pertence o produto?</label>
             <Field
               name='selectedRoom'
               as='select'
-              id="comodos"
               className={`shadow border rounded w-full py-2 px-3 text-zinc-700 leading-tight focus:outline-none focus:shadow-outline ${errors.selectedRoom && touched.selectedRoom ? "border-red-400" : ""}`}
             >
               <option selected value='0'>Comodos</option>
@@ -131,7 +132,7 @@ export function NewProduct({ rooms }: NewProductProps) {
             <Field
               type="text"
               name='description'
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-zinc-700 leading-tight focus:outline-none focus:shadow-outline ${errors.nameProduct && touched.nameProduct ? "border-red-400" : ""}`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-zinc-700 leading-tight focus:outline-none focus:shadow-outline ${errors.description && touched.description ? "border-red-400" : ""}`}
             />
             <ErrorMessage name="description" component='div' className="text-red-400 text-xs leading-tight mt-1 ml-0.5" />
           </div>
@@ -139,10 +140,10 @@ export function NewProduct({ rooms }: NewProductProps) {
           <div className={`mb-4 ${errors.link && touched.link ? "mb-1" : "mb-4"}`}>
 
             <label htmlFor='link' className='block text-zinc-700 text-sm font-bold mb-2'>Link da loja</label>
-            <input
+            <Field
               type="text"
-              name="link"
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-zinc-700 leading-tight focus:outline-none focus:shadow-outline ${errors.nameProduct && touched.nameProduct ? "border-red-400" : ""}`}
+              name='link'
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-zinc-700 leading-tight focus:outline-none focus:shadow-outline ${errors.link && touched.link ? "border-red-400" : ""}`}
             />
             <ErrorMessage name="link" component='div' className="text-red-400 text-xs leading-tight mt-1 ml-0.5" />
           </div>
@@ -153,7 +154,7 @@ export function NewProduct({ rooms }: NewProductProps) {
             <Field
               type="text"
               name='urlImage'
-              className={`shadow appearance-none border rounded w-full py-2 px-3 text-zinc-700 leading-tight focus:outline-none focus:shadow-outline ${errors.nameProduct && touched.nameProduct ? "border-red-400" : ""}`}
+              className={`shadow appearance-none border rounded w-full py-2 px-3 text-zinc-700 leading-tight focus:outline-none focus:shadow-outline ${errors.urlImage && touched.urlImage ? "border-red-400" : ""}`}
             />
             <ErrorMessage name="urlImage" component='div' className="text-red-400 text-xs leading-tight mt-1 ml-0.5" />
           </div>
