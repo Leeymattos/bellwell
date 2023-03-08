@@ -21,7 +21,12 @@ export default async function handler(
 
       const deleteProductId = deleteProductSchema.parse(req.query)
 
-      const response = await deleteProduct(deleteProductId)
+      const response = await deleteProduct(deleteProductId);
+
+      if (!response) {
+        res.status(400).send({});
+      }
+
 
       res.status(200).send(response)
     } catch (error) {

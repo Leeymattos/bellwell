@@ -18,18 +18,13 @@ type ProductsProps = {
 }
 
 export default function Home({ products, rooms }: ProductsProps) {
-
   const [selectedRoom, setSelectedRoom] = useState<string>('0');
   const [selectedProducts, setSelectedProducts] = useState<Product[]>(products)
   const [searchProduct, setSearchProduct] = useState<string>('')
   const router = useRouter();
 
-  const refreshData = () => {
-    router.replace(router.asPath);
-  }
-
   useEffect(() => {
-    let filteredProducts = products;
+    let filteredProducts = products
 
     if (selectedRoom !== '0') {
       filteredProducts = filteredProducts.filter(
@@ -49,19 +44,12 @@ export default function Home({ products, rooms }: ProductsProps) {
 
   async function handleDeleteProduct(id: string) {
     try {
-      await api.delete(`/product/${id}`);
+      const res = await api.delete(`/product/${id}`);
+      if (res.status < 300) {
+        router.replace(router.asPath);
+        console.log('eba');
+      }
 
-      toast.success('Produto excluído com sucesso!', {
-        transition: Flip,
-        position: "top-center",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: false,
-        theme: "colored",
-        progress: undefined,
-      });
 
     } catch (error) {
       toast.error(`Produto não excluído, tente novamente!`, {
