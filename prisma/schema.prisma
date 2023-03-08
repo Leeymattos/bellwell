@@ -23,7 +23,7 @@ model Product {
   id          String @id @default(uuid())
   name        String
   description String
-  link        String
+  link        String @db.VarChar(350)
   image_url   String
   room_id     String
 

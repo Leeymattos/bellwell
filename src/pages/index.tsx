@@ -18,9 +18,11 @@ type ProductsProps = {
 }
 
 export default function Home({ products, rooms }: ProductsProps) {
+
+  const [deletingProductId, setDeletingProductId] = useState('')
   const [selectedRoom, setSelectedRoom] = useState<string>('0');
-  const [selectedProducts, setSelectedProducts] = useState<Product[]>(products)
-  const [searchProduct, setSearchProduct] = useState<string>('')
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>(products);
+  const [searchProduct, setSearchProduct] = useState<string>('');
   const router = useRouter();
 
   useEffect(() => {
@@ -39,17 +41,28 @@ export default function Home({ products, rooms }: ProductsProps) {
     }
 
     setSelectedProducts(filteredProducts);
+    setDeletingProductId('');
 
-  }, [selectedRoom, searchProduct])
+  }, [selectedRoom, searchProduct, products])
 
   async function handleDeleteProduct(id: string) {
     try {
       const res = await api.delete(`/product/${id}`);
-      if (res.status < 300) {
-        router.replace(router.asPath);
-        console.log('eba');
-      }
 
+      router.replace(router.asPath);
+      setDeletingProductId(id);
+
+      toast.success('Produto excluído com sucesso!', {
+        transition: Flip,
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        theme: "colored",
+        progress: undefined,
+      });
 
     } catch (error) {
       toast.error(`Produto não excluído, tente novamente!`, {
@@ -134,7 +147,7 @@ export default function Home({ products, rooms }: ProductsProps) {
                   />
                   <button
                     type="submit"
-                    className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-emerald-600 rounded-r-xl border border-gray-300 focus:outline-none">
+                    className="absolute top-[2px] right-[1px] p-[9px] text-sm font-medium text-white bg-emerald-600 rounded-r-xl border border-gray-300 focus:outline-none">
                     <MagnifyingGlass className='w-5 h-5' />
                     <span className="sr-only">Search</span>
                   </button>
@@ -148,7 +161,7 @@ export default function Home({ products, rooms }: ProductsProps) {
 
           {selectedProducts.map(product => {
             return (
-              <div key={product.id} className='col-span-12 flex justify-center'>
+              <div key={product.id} className={`col-span-12 flex justify-center ${deletingProductId === product.id ? "opacity-40" : ""}`}>
                 <div className='w-[80%] border border-gray-200 rounded-lg shadow p-2'>
                   <img src={product.image_url} alt={`Imagem do produto ${product.name}`} className='shadow-lg' />
 

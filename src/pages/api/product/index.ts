@@ -28,7 +28,7 @@ export default async function handler(
       const createProductSchema = z.object({
         name: z.string({ required_error: "Name is required" }).min(4),
         description: z.string().min(5),
-        link: z.string().min(5),
+        link: z.string().min(5).max(1000),
         image_url: z.string().min(5),
         room_id: z.string().min(2)
       })
