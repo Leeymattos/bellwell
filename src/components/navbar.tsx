@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
-  { name: 'Contato', href: '/', current: false },
+  { name: 'Contato', href: '/contact', current: false },
   { name: 'Login', href: '/api/auth/login', current: false },
 ]
 const userNavigation = [
@@ -37,8 +37,8 @@ export default function Nav() {
                       <Image
                         src={logo}
                         alt='logo'
-                        width={100}
-                        height={100}
+                        width={80}
+                        height={80}
                       />
                     </div>
                     <div className="hidden md:block">
