@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { GetServerSideProps } from 'next'
 import { getProducts } from '../lib/products'
 import { Product, Room } from '@prisma/client'
-import { MagnifyingGlass, Plus, X } from 'phosphor-react'
+import { MagnifyingGlass, Plus, SignIn, X } from 'phosphor-react'
 import * as Dialog from '@radix-ui/react-dialog';
 import { getRooms } from '@/lib/rooms'
 import { useEffect, useState } from 'react'
@@ -11,6 +11,9 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { api } from '@/services/api'
 import { Flip, toast } from 'react-toastify'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
+import logo from '../assets/1 (1).png'
+import Nav from '@/components/navbar'
 
 type ProductsProps = {
   products: Product[]
@@ -89,11 +92,10 @@ export default function Home({ products, rooms }: ProductsProps) {
       </Head>
       <div className='container bg-zinc-50'>
         <header className='p-4 bg-zinc-100'>
+          <Nav />
           <div className='flex items-center justify-between'>
 
-            <h1 className='font-bold text-3xl p-2'>BellWell</h1>
-
-            <Dialog.Root>
+            {/* <Dialog.Root>
               <Dialog.Trigger className='flex items-center gap-1 h-10 p-2 text-sm font-bold border-2 border-slate-900 rounded-lg focus:outline-slate-500 '>
                 <Plus size={20} />
                 Novo Item
@@ -113,8 +115,7 @@ export default function Home({ products, rooms }: ProductsProps) {
 
                 </Dialog.Content>
               </Dialog.Portal>
-            </Dialog.Root>
-
+            </Dialog.Root> */}
 
           </div>
           <div className="w-full my-4">
