@@ -1,9 +1,13 @@
-import Nav from "@/components/navbar";
+import Nav from "@/components/nav";
+import { useRouter } from "next/router";
 
 export default function Contact() {
+  const router = useRouter()
+  console.log(router.asPath);
+
   return (
     <>
-      <Nav />
+      <Nav pageNow={router.asPath} />
 
       Contato
     </>
