@@ -26,8 +26,8 @@ function classNames(...classes: any) {
 
 interface navProps {
   pageNow: string
-  isAdmin: boolean
-  rooms: Room[]
+  isAdmin?: boolean
+  rooms?: Room[]
 }
 
 export default function Nav({ pageNow, isAdmin, rooms }: navProps) {

@@ -6,7 +6,7 @@ import { toast, Flip } from "react-toastify";
 import { useRouter } from 'next/router'
 
 type NewProductProps = {
-  rooms: Room[]
+  rooms?: Room[]
 }
 
 interface ValuesForm {
@@ -109,7 +109,7 @@ export function NewProduct({ rooms }: NewProductProps) {
               className={`shadow border rounded w-full py-2 px-2 text-zinc-700 leading-tight text-sm h-10 focus:outline-none focus:shadow-outline ${errors.selectedRoom && touched.selectedRoom ? "border-red-400" : ""}`}
             >
               <option selected value='0'>Por favor escolha sua opção</option>
-              {rooms.map(room => {
+              {rooms?.map(room => {
                 return (
                   <option
                     key={room.id}
